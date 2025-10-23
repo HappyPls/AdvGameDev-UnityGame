@@ -21,13 +21,12 @@ namespace Dungeon
         public int Cols => _cols;
         public Room RoomAt(int r, int c) => _grid[r, c];
 
-        public Map() : this(5, 5, new System.Random()) { }
+        public Map() : this(5, 5) { }
 
-        public Map(int rows, int cols, System.Random rng)
+        public Map(int rows, int cols)
         {
             _rows = Math.Max(5, rows);
             _cols = Math.Max(5, cols);
-            _rng = rng ?? new System.Random();
 
             _grid = new Room[_rows, _cols];
 
@@ -105,6 +104,7 @@ namespace Dungeon
 
         private void GenerateRooms()
         {
+            _rng = new System.Random();
             bool haveTreasure = false;
             bool haveEncounter = false;
 

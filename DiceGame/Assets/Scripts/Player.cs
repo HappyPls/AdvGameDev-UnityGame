@@ -25,8 +25,8 @@ namespace Dungeon
         public List<Consumable> Consumables { get; protected set; } = new List<Consumable>();
 
         // Equipped items
-        public Weapon? EquippedWeapon { get; protected set; }
-        public ArmourItem? EquippedArmour { get; protected set; }
+        public Weapon EquippedWeapon { get; protected set; }
+        public ArmourItem EquippedArmour { get; protected set; }
 
         // Keep base stats so we can recalc after equip/unequip
         private int _baseDamageMin;
@@ -43,8 +43,8 @@ namespace Dungeon
             int damageMax = 20,
             int critChance = 15,
             int critMultiplier = 150,
-            int[]? diceSides = null,
-            Random? rng = null
+            int[] diceSides = null,
+            Random rng = null
         )
         : base(
             name: string.IsNullOrWhiteSpace(name) ? "Player" : name.Trim(),

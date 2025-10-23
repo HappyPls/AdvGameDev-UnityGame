@@ -5,10 +5,10 @@ namespace Dungeon
 {
     public abstract class Room
     {
-        public Room? North;
-        public Room? South;
-        public Room? East;
-        public Room? West;
+        public Room North;
+        public Room South;
+        public Room East;
+        public Room West;
 
         public bool Visited;
         public int VisitCount;

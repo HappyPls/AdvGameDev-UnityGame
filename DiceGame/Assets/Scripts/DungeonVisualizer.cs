@@ -1,9 +1,17 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine;
 
 namespace Dungeon
 {
     public class DungeonVisualizer : MonoBehaviour
     {
+        [Header("Rooms")]
+        [SerializeField] private RoomBase[] RoomPrefabs;
+        [SerializeField] private float RoomSize = 1;
+        [SerializeField] private Transform RoomParent;
+
         [Header("Visuals")]
         public float cellSize = 1f;
         public float playerYOffset = 0.75f;
@@ -28,30 +36,35 @@ namespace Dungeon
         {
             if (!_initialized) return;
 
-            if (Input.GetKeyDown(KeyCode.Alpha1)) TryMove("n");
-            if (Input.GetKeyDown(KeyCode.Alpha2)) TryMove("s");
-            if (Input.GetKeyDown(KeyCode.Alpha3)) TryMove("e");
-            if (Input.GetKeyDown(KeyCode.Alpha4)) TryMove("w");
+            if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) TryMove("n");
+            if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) TryMove("s");
+            if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) TryMove("e");
+            if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) TryMove("w");
         }
 
         private void BuildGrid()
         {
+            if (RoomPrefabs == null || RoomPrefabs.Length == 0)
+            {
+                Debug.LogError("Room Prefabs is Empty!");
+                return;
+            }
+
             _tiles = new GameObject[_map.Rows, _map.Cols];
 
             for (int r = 0; r < _map.Rows; r++)
             {
                 for (int c = 0; c < _map.Cols; c++)
                 {
-                    var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                    go.name = $"Tile_{r}_{c}";
-                    go.transform.position = GridToWorld(r, c);
-                    go.transform.localScale = Vector3.one * cellSize;
+                    RoomBase prefab = RoomPrefabs[Mathf.Clamp(0,0, RoomPrefabs.Length -1)];
+                    Vector3 pos = GridToWorld(r,c);
 
-                    var rend = go.GetComponent<Renderer>();
-                    if (rend != null)
-                        rend.material.color = ColorFor(_map.RoomAt(r, c));
+                    RoomBase instance = Instantiate(prefab, pos, Quaternion.identity, RoomParent != null ? RoomParent : transform);
+                    instance.name = $"Room_{r}_{c}";
+                    instance.transform.localScale = Vector3.one * RoomSize;
 
-                    _tiles[r, c] = go;
+
+                    _tiles[r, c] = instance.gameObject;
                 }
             }
         }
@@ -65,16 +78,6 @@ namespace Dungeon
         private Vector3 GridToWorld(int r, int c)
         {
             return new Vector3(r * cellSize, 0f, c * cellSize);
-        }
-
-        private static Color ColorFor(Room room)
-        {
-            if (room is BossEncounterRoom) return Color.red;
-            if (room is EncounterRoom) return Color.yellow;
-            if (room is TreasureRoom) return Color.green;
-            if (room is TrapRoom) return new Color(1f, 0.5f, 0f);
-            if (room is SafeRoom) return Color.cyan;
-            return Color.gray;
         }
 
         private void TryMove(string dir)

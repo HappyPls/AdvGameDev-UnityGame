@@ -22,11 +22,11 @@ namespace Dungeon
 
         void Start()
         {
-            _map = new Map(rows, cols, Rng);
+            _map = new Map(rows, cols);
             _player = new Player(name: "Hero", isComputer: false);
+
             EnemySpawner.ForceGolemSpawn();
 
-            // Ensure we have a marker instance
             if (playerMarker == null)
             {
                 if (playerPrefab != null)
@@ -37,7 +37,7 @@ namespace Dungeon
                 }
                 else
                 {
-                    // fallback: create a sphere if no prefab provided
+                    // create a sphere if no prefab provided
                     var go = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                     go.name = "PlayerMarker";
                     playerMarker = go.transform;
