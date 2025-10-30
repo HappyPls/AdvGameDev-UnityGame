@@ -56,10 +56,13 @@ namespace Dungeon
             {
                 for (int c = 0; c < _map.Cols; c++)
                 {
-                    RoomBase prefab = RoomPrefabs[Mathf.Clamp(0,0, RoomPrefabs.Length -1)];
-                    Vector3 pos = GridToWorld(r,c);
+                    Room room = _map.RoomAt(r, c);
+                    RoomBase prefab = SelectPrefab(room);
 
+                    Vector3 pos = GridToWorld(r,c);
                     RoomBase instance = Instantiate(prefab, pos, Quaternion.identity, RoomParent != null ? RoomParent : transform);
+                    var view = instance.GetComponent<EncounterRoomView>(); if (view != null && room is EncounterRoom enc) view.SetCleared(enc.Cleared);
+
                     instance.name = $"Room_{r}_{c}";
                     instance.transform.localScale = Vector3.one * RoomSize;
 
@@ -67,6 +70,21 @@ namespace Dungeon
                     _tiles[r, c] = instance.gameObject;
                 }
             }
+
+        }
+
+        private RoomBase SelectPrefab(Room room)
+        {
+            if (room == null) return RoomPrefabs[0];
+
+            if (room is BossEncounterRoom) return RoomPrefabs[5];
+            if (room is EncounterRoom) return RoomPrefabs[1];
+            if (room is TreasureRoom) return RoomPrefabs[2];
+            if (room is TrapRoom) return RoomPrefabs[3];
+            if (room is SafeRoom) return RoomPrefabs[4];
+            if (room is EmptyRoom) return RoomPrefabs[0];
+
+            return RoomPrefabs[0];
         }
 
         private void PositionPlayerMarker()
