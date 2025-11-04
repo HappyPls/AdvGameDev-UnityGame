@@ -1,4 +1,7 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+using UnityEditor;
+#endif
+using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
