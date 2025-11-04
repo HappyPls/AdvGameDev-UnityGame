@@ -1,4 +1,7 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+using UnityEditor;
+#endif
+using System;
 using UnityEngine;
 
 namespace Dungeon
@@ -12,9 +15,12 @@ namespace Dungeon
         [SerializeField] private GameObject playerPrefab;
         private Transform playerMarker;
 
-        [Header("Map Size")]
-        [SerializeField] private int rows = 5;
-        [SerializeField] private int cols = 5;
+        [Header("Grid Settings")]
+        [SerializeField] private GridSettings _gridSettings = null;
+
+        //[Header("Map Size")]
+        //[SerializeField] private int rows = 5;
+        //[SerializeField] private int cols = 5;
 
         private Map _map = null!;
         private Player _player = null!;
@@ -22,7 +28,7 @@ namespace Dungeon
 
         void Start()
         {
-            _map = new Map(rows, cols);
+            _map = new Map(_gridSettings.Rows, _gridSettings.Cols);
             _player = new Player(name: "Hero", isComputer: false);
 
             EnemySpawner.ForceGolemSpawn();
