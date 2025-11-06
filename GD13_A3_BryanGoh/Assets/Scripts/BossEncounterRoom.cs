@@ -31,7 +31,6 @@ namespace Dungeon
                 return;
             }
 
-            EnemySpawner.ForceGolemSpawn();
             Console.WriteLine("A colossal presence looms...");
             gm.StartEncounter();
 

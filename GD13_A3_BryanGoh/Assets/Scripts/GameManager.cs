@@ -20,14 +20,17 @@ namespace Dungeon
 
         private Map _map = null!;
         private Player _player = null!;
+
         public bool HasWon { get; private set; }
+        public bool InCombat { get; private set; }
+        private bool _encounterCheckedThisCell = false;
+        private int _lastRow = int.MinValue;
+        private int _lastCol = int.MinValue;
 
         void Start()
         {
             _map = new Map(_gridSettings.Rows, _gridSettings.Cols);
             _player = new Player(name: "Hero", isComputer: false);
-
-            EnemySpawner.ForceGolemSpawn();
 
             if (playerMarker == null)
             {
@@ -50,6 +53,9 @@ namespace Dungeon
             if (visualizer != null)
                 visualizer.Init(_map, playerMarker);
 
+            var startRoom = _map.CurrentRoom();
+            startRoom?.OnRoomEntered(this, _player);
+
             Debug.Log("Welcome to Dicey Dungeon");
             PrintGameIntro();
             PrintPokerRules();
@@ -57,17 +63,21 @@ namespace Dungeon
 
         public void StartEncounter()
         {
+            if (InCombat) return;
+            InCombat = true;
+
             int prevRow = _map.Row;
             int prevCol = _map.Col;
 
-            Enemy enemy = EnemySpawner.SpawnRandomEnemy(Rng);
+            Room room = _map.CurrentRoom();
+            Enemy enemy = EnemySpawner.SpawnForRoom(room, Rng);
 
             CombatMenu cm = new CombatMenu();
             cm.StartCombat(_player, enemy, _map, prevRow, prevCol);
 
             if (enemy.HP <= 0)
             {
-                var enc = _map.CurrentRoom() as EncounterRoom;
+                EncounterRoom enc = _map.CurrentRoom() as EncounterRoom;
                 if (enc != null) enc.Cleared = true;
 
                 var boss = _map.CurrentRoom() as BossEncounterRoom;
@@ -77,11 +87,76 @@ namespace Dungeon
                 {
                     HasWon = true;
                     Debug.Log("You have slain the Iron Golem! You defeated the Iron Golem and escape the dungeon!");
+                    InCombat = false;
                     return;
                 }
 
                 Debug.Log("You search the foe's remains.");
                 GrantRandomLoot(_player, 1, 2, LootBias.ConsumablesLean);
+            }
+
+            InCombat = false;
+        }
+
+        private void Update()
+        {
+            if (InCombat) return;
+
+            if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) MoveCommand("north");
+            if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) MoveCommand("south");
+            if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) MoveCommand("east");
+            if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) MoveCommand("west");
+
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                var room = _map.CurrentRoom();
+                room?.OnRoomSearched(this, _player);
+            }
+
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                FleeToPrevious();
+            }
+        }
+
+        private void MoveCommand(string direction)
+        {
+            var oldRoom = _map.CurrentRoom();
+            oldRoom?.OnRoomExit(this, _player);
+
+            if(_map.TryMove(direction))
+            {
+                var newRoom = _map.CurrentRoom();
+                newRoom?.OnRoomEntered(this, _player);
+                
+                visualizer.UpdatePlayerMarker(_map, playerMarker);
+                _encounterCheckedThisCell = false;
+                MaybeStartEncounter();
+            }
+            else
+            {
+                Debug.Log("You can't move that way.");
+            }
+        }
+
+        private void FleeToPrevious()
+        {
+            var oldRoom = _map.CurrentRoom();
+            oldRoom?.OnRoomExit(this, _player);
+
+            if(_map.FleeToPreviousRoom())
+            {
+                var newRoom = _map.CurrentRoom();
+                newRoom?.OnRoomEntered(this, _player);
+
+                visualizer.UpdatePlayerMarker(_map, playerMarker);
+
+                _encounterCheckedThisCell = false;
+                MaybeStartEncounter();
+            }
+            else
+            {
+                Debug.Log("You cannot flee");
             }
         }
 
@@ -118,7 +193,23 @@ namespace Dungeon
                 GiveItem(player, item);
             }
         }
+        private void MaybeStartEncounter()
+        {
+            if (InCombat) return;
 
+            if (_encounterCheckedThisCell && _lastRow == _map.Row && _lastCol == _map.Col) return;
+
+            Room room = _map.CurrentRoom();
+            _encounterCheckedThisCell = true;
+            _lastRow = _map.Row;
+            _lastCol = _map.Col;
+
+            var enc = room as EncounterRoom;
+            if (enc != null && !enc.Cleared)
+            {
+                StartEncounter();
+            }
+        }
         private void PrintGameIntro()
         {
             Debug.Log("You wake up in a dungeon with no memory of how you got here.");

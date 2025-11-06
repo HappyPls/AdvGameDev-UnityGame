@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Dungeon
@@ -65,6 +66,7 @@ namespace Dungeon
                 else
                 {
                     Console.WriteLine("Invalid choice. Try again.");
+                    Console.WriteLine(choice);
                 }
             }
 

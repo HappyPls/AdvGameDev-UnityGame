@@ -35,15 +35,6 @@ namespace Dungeon
             _initialized = true;
         }
 
-        void Update()
-        {
-            if (!_initialized) return;
-
-            if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) TryMove("n");
-            if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) TryMove("s");
-            if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) TryMove("e");
-            if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) TryMove("w");
-        }
 
         private void BuildGrid()
         {
@@ -109,18 +100,11 @@ namespace Dungeon
             return new Vector3(r * cellSize, 0f, c * cellSize);
         }
 
-        private void TryMove(string dir)
+        public void UpdatePlayerMarker(Map map, Transform marker)
         {
-            if (_map.TryMove(dir))
-            {
-                PositionPlayerMarker();
-                Debug.Log($"Moved {dir.ToUpper()} → ({_map.Row},{_map.Col}) " +
-                          $"[{_map.CurrentRoom().GetType().Name}] visits: {_map.CurrentRoom().VisitCount}");
-            }
-            else
-            {
-                Debug.Log("Blocked.");
-            }
+            _map = map;
+            _playerMarker = marker;
+            PositionPlayerMarker();
         }
     }
 }

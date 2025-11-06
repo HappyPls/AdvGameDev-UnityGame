@@ -4,36 +4,43 @@ namespace Dungeon
 {
     public class EnemySpawner
     {
-        private static bool _golemSpawned = false;
-        private static bool _forceGolem = false;
+        private static bool _bossSpawnedThisRun = false;
 
-        public static void ForceGolemSpawn()
+        public static Enemy SpawnForRoom(Room room, Random rng)
         {
-            _forceGolem = true;
-        }
-
-        public static Enemy SpawnRandomEnemy(Random rng)
-        {
-            if (_forceGolem && !_golemSpawned)
+            if (room is BossEncounterRoom)
             {
-                _forceGolem = false;
-                _golemSpawned = true;
-                return new IronGolem(rng);
+                _bossSpawnedThisRun = true;
+                return SpawnBoss(rng);
             }
-
-            int roll = rng.Next(1, 11);
-
-            if (!_golemSpawned && roll == 1)
-            {
-                _golemSpawned = true;
-                return new IronGolem(rng);
-            }
-            else if (roll <= 3)
-                return new ArmouredOrc(rng);
-            else if (roll <= 6)
-                return new Goblin(rng);
             else
+            {
+                return SpawnNormal(rng);
+            }
+        }
+        public static Enemy SpawnRandomNonBoss(Random rng)
+        {
+            return SpawnNormal(rng);
+        }
+        private static Enemy SpawnBoss(Random rng)
+        {
+            return new IronGolem(rng);
+        }
+        private static Enemy SpawnNormal(Random rng)
+        {
+            int roll = rng.Next(1, 11); // 1..10
+            if (roll <= 3)
+            {
+                return new ArmouredOrc(rng);
+            }
+            else if (roll <= 6)
+            {
+                return new Goblin(rng);
+            }
+            else
+            {
                 return new CaveSlime(rng);
+            }
         }
     }
 }
