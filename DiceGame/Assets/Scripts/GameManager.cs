@@ -18,10 +18,6 @@ namespace Dungeon
         [Header("Grid Settings")]
         [SerializeField] private GridSettings _gridSettings = null;
 
-        //[Header("Map Size")]
-        //[SerializeField] private int rows = 5;
-        //[SerializeField] private int cols = 5;
-
         private Map _map = null!;
         private Player _player = null!;
         public bool HasWon { get; private set; }

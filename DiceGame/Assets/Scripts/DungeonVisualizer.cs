@@ -62,29 +62,36 @@ namespace Dungeon
                     Room room = _map.RoomAt(r, c);
                     RoomBase prefab = SelectPrefab(room);
 
-                    Vector3 pos = GridToWorld(r,c);
-                    RoomBase instance = Instantiate(prefab, pos, Quaternion.identity, RoomParent != null ? RoomParent : transform);
-                    var view = instance.GetComponent<EncounterRoomView>(); if (view != null && room is EncounterRoom enc) view.SetCleared(enc.Cleared);
+                    Vector3 pos = GridToWorld(r, c);
+                    RoomBase instance = Instantiate(prefab, pos, Quaternion.identity,
+                        RoomParent != null ? RoomParent : transform);
 
                     instance.name = $"Room_{r}_{c}";
                     instance.transform.localScale = Vector3.one * RoomSize;
-
-
                     _tiles[r, c] = instance.gameObject;
                 }
             }
-
         }
 
         private RoomBase SelectPrefab(Room room)
         {
             if (room == null) return RoomPrefabs[0];
 
-            if (room is BossEncounterRoom) return RoomPrefabs[5];
-            if (room is EncounterRoom) return RoomPrefabs[1];
-            if (room is TreasureRoom) return RoomPrefabs[2];
-            if (room is TrapRoom) return RoomPrefabs[3];
-            if (room is SafeRoom) return RoomPrefabs[4];
+            if (room is BossEncounterRoom) return RoomPrefabs[9];
+            if (room is EncounterRoom)
+            {
+                int[] options = { 1, 2, 3 };
+                int index = options[UnityEngine.Random.Range(0, options.Length)];
+                return RoomPrefabs[index];
+            }
+            if (room is TreasureRoom)
+            {
+                int[] options = { 4, 5, 6 };
+                int index = options[UnityEngine.Random.Range(0, options.Length)];
+                return RoomPrefabs[index];
+            }
+            if (room is SafeRoom) return RoomPrefabs[7];
+            if (room is TrapRoom) return RoomPrefabs[8];
             if (room is EmptyRoom) return RoomPrefabs[0];
 
             return RoomPrefabs[0];
@@ -93,7 +100,8 @@ namespace Dungeon
         private void PositionPlayerMarker()
         {
             if (_playerMarker == null) return;
-            _playerMarker.position = GridToWorld(_map.Row, _map.Col) + new Vector3(0f, playerYOffset, 0f);
+            _playerMarker.position = GridToWorld(_map.Row, _map.Col) +
+                                     new Vector3(0f, playerYOffset, 0f);
         }
 
         private Vector3 GridToWorld(int r, int c)
@@ -106,7 +114,8 @@ namespace Dungeon
             if (_map.TryMove(dir))
             {
                 PositionPlayerMarker();
-                Debug.Log($"Moved {dir.ToUpper()} → ({_map.Row},{_map.Col}) [{_map.CurrentRoom().GetType().Name}] visits: {_map.CurrentRoom().VisitCount}");
+                Debug.Log($"Moved {dir.ToUpper()} → ({_map.Row},{_map.Col}) " +
+                          $"[{_map.CurrentRoom().GetType().Name}] visits: {_map.CurrentRoom().VisitCount}");
             }
             else
             {

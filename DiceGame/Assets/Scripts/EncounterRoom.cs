@@ -30,8 +30,6 @@ namespace Dungeon
             }
 
             Debug.Log("An opponent appears! Time for a duel! (Poker Rules)");
-            gm.StartEncounter();
-
         }
 
         public override void OnRoomSearched(GameManager gm, Player player)

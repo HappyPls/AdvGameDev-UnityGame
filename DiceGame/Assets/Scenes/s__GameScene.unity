@@ -150,8 +150,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Dungeon.DungeonVisualizer
   RoomPrefabs:
   - {fileID: -8297317046039999144, guid: 38894a3dc65578b4aab9d30ce275fec1, type: 3}
+  - {fileID: -8297317046039999144, guid: c39fb13ddf3031f47bb602774cf158e0, type: 3}
   - {fileID: -8297317046039999144, guid: da0e209582019b848ad60f23299ee4b9, type: 3}
+  - {fileID: -8297317046039999144, guid: d48c396fce609d745bdfce7e9a0045ba, type: 3}
   - {fileID: -8297317046039999144, guid: 9e3e9109cb1067a48be2d84a916f15a4, type: 3}
+  - {fileID: -8297317046039999144, guid: 7bba721babbcfd249b2b9e727cec89a0, type: 3}
+  - {fileID: -8297317046039999144, guid: 07fbde2427d707641a04afa4c45f7a83, type: 3}
   - {fileID: -8297317046039999144, guid: 5d836e68022818940af470f76d0607ed, type: 3}
   - {fileID: -8297317046039999144, guid: 6463aa978bac5694984c91fbcde53d8a, type: 3}
   - {fileID: -8297317046039999144, guid: 5ca6450a6abd62d46b9c6a8050595053, type: 3}
