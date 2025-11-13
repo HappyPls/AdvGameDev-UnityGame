@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e613535514d39bb4ca173d997b2138dd, type: 3}
+  m_Name: Loot Table
+  m_EditorClassIdentifier: Assembly-CSharp::Dungeon.LootTable
+  Items:
+  - {fileID: 11400000, guid: f16b83a6fee39744783914e66bcf3dbf, type: 2}
+  - {fileID: 11400000, guid: 2751d290e7ec3a14b8488434ea47719f, type: 2}
+  - {fileID: 11400000, guid: 42ae1ef8eaf27884b9eac653186c660c, type: 2}
+  - {fileID: 11400000, guid: f4c54f7d37e5af84baa6ff5221e2e180, type: 2}
+  - {fileID: 11400000, guid: 9f7e4c88ae6ab0546a2681decbdbbe06, type: 2}
+  CommonWeight: 60
+  UncommonWeight: 25
+  RareWeight: 10
+  EpicWeight: 4
+  LegendaryWeight: 1
+  CommonMultiplier: 1
+  UncommonMultiplier: 1.1
+  RareMultiplier: 1.25
+  EpicMultiplier: 1.5
+  LegendaryMultiplier: 2

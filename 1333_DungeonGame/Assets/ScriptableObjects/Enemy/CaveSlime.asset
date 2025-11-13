@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44f9f3ba9f509284b8403c1dce564b22, type: 3}
+  m_Name: CaveSlime
+  m_EditorClassIdentifier: Assembly-CSharp::Dungeon.EnemyData
+  DisplayName: Cave Slime
+  Level: 1
+  MaxHp: 100
+  AttackPower: 10
+  Defense: 5
+  Speed: 10
+  CritChance: 0.1
+  CritMultiplier: 1.5
+  DodgeChance: 0.05
+  DiceSet:
+  - Sides: 6
+    Label: d6
+  - Sides: 6
+    Label: d6
+  - Sides: 6
+    Label: d6
+  - Sides: 8
+    Label: d8
+  - Sides: 8
+    Label: d8
+  HandSize: 5
+  XPReward: 5
+  GoldRewardMin: 1
+  GoldRewardMax: 5
+  IsBoss: 0
