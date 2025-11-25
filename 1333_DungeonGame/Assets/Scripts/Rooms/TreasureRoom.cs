@@ -12,6 +12,8 @@ namespace Dungeon
 
         public override void TriggerRoomEvent(Player player)
         {
+            Debug.Log("TreasureRoom: TriggerRoomEvent called for " + (player != null ? player.name : "NULL"));
+
             if (IsCleared)
             {
                 Debug.Log("Treasure already claimed.");
@@ -43,9 +45,10 @@ namespace Dungeon
             {
                 ItemDrop drop;
                 bool ok = LootTable.TryRoll(out drop);
+
                 if (ok && drop.Item != null)
                 {
-                    player.AddItem(drop.Item, 1);
+                    bool added = player.Inventory.AddItem(drop.Item, 1, drop.Rarity);
 
                     float mul = LootTable.GetStatMultiplier(drop.Rarity);
                     Debug.Log(
@@ -59,6 +62,10 @@ namespace Dungeon
                 i += 1;
             }
 
+            if (player.Inventory != null)
+            {
+                player.Inventory.DebugPrintContents();
+            }
             IsCleared = true;
         }
     }

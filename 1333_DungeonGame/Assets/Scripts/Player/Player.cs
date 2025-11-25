@@ -133,25 +133,15 @@ namespace Dungeon
             Debug.Log(DisplayName + " gained " + amount + " gold. Total: " + Gold);
         }
 
-        public void AddItem(ItemBase item, int amount, ItemRarity rarity)
+        public bool AddItem(ItemBase item, int amount, ItemRarity rarity)
         {
             if (Inventory == null)
             {
                 Debug.LogWarning("Player has no Inventory component.");
-                return;
+                return false;
             }
 
-            bool ok = Inventory.AddItem(item, amount, rarity);
-            if (ok)
-            {
-                Debug.Log(
-                    "Player received " + amount + " x " + rarity + " " + item.DisplayName
-                );
-            }
-            else
-            {
-                Debug.LogWarning("Inventory full, could not add item: " + item.DisplayName);
-            }
+            return Inventory.AddItem(item, amount, rarity);
         }
 
         public void AddItem(ItemBase item, int amount)

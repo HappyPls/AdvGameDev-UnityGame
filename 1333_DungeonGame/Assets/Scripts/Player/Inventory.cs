@@ -82,7 +82,9 @@ namespace Dungeon
                 j += 1;
             }
 
-            return remaining <= 0;
+            bool result = remaining <= 0;
+            Debug.Log($"Inventory.AddItem result for {item.DisplayName}: success={result}");
+            return result;
         }
         public bool AddItem(ItemBase item, int amount)
         {
@@ -148,6 +150,23 @@ namespace Dungeon
                     return Slots[i];
             }
             return null;
+        }
+        public void DebugPrintContents()
+        {
+            Debug.Log($"=== INVENTORY CONTENTS (ID {GetInstanceID()}) ===");
+            for (int i = 0; i < Slots.Count; i++)
+            {
+                InventorySlot slot = Slots[i];
+                if (slot == null || slot.IsEmpty)
+                {
+                    Debug.Log($"Slot {i}: [EMPTY]");
+                }
+                else
+                {
+                    string itemName = slot.Item != null ? slot.Item.DisplayName : "NULL";
+                    Debug.Log($"Slot {i}: {itemName} x{slot.Quantity} (rarity {slot.Rarity})");
+                }
+            }
         }
     }
 }

@@ -24,27 +24,25 @@ namespace Dungeon
 
         void Awake()
         {
-            if (Player == null)
-            {
-                Player = FindFirstObjectByType<Player>();
-            }
-
-            if (Inventory == null && Player != null)
-            {
-                Inventory = Player.Inventory;
-            }
-
             if (InventoryPanel != null)
             {
                 InventoryPanel.SetActive(false);
             }
-
-            BuildSlots();
         }
 
+        private void Start()
+        {
+            HookToPlayerInventory();
+            BuildSlots();
+            RefreshAllSlots();
+        }
         void Update()
         {
-            // New Input System polling
+            if (Player == null || Inventory == null)
+            {
+                HookToPlayerInventory();
+            }
+
             Keyboard kb = Keyboard.current;
             if (kb != null && kb.bKey != null && kb.bKey.wasPressedThisFrame)
             {
@@ -65,19 +63,15 @@ namespace Dungeon
                 return;
             }
 
-            int childCount = SlotsParent.childCount;
-            int i = childCount - 1;
-            while (i >= 0)
+            for (int i = SlotsParent.childCount - 1; i >= 0; i--)
             {
                 Destroy(SlotsParent.GetChild(i).gameObject);
-                i -= 1;
             }
 
             _slotUIs.Clear();
 
             int capacity = Inventory.Capacity;
-            int index = 0;
-            while (index < capacity)
+            for (int index = 0; index < capacity; index++)
             {
                 InventorySlotUI ui = Instantiate(SlotPrefab, SlotsParent);
                 ui.Init(this, index);
@@ -86,21 +80,22 @@ namespace Dungeon
                 if (btn != null)
                 {
                     int capturedIndex = index;
-                    btn.onClick.AddListener(delegate { OnSlotClicked(capturedIndex); });
+                    btn.onClick.AddListener(() => OnSlotClicked(capturedIndex));
                 }
 
                 _slotUIs.Add(ui);
-                index += 1;
             }
+            Debug.Log($"[InventoryUI] Built {_slotUIs.Count} slot UIs.");
         }
 
         private void RefreshAllSlots()
         {
             if (Inventory == null) return;
 
+            Debug.Log($"[InventoryUI] RefreshAllSlots using Inventory ID {Inventory.GetInstanceID()}");
+
             int count = _slotUIs.Count;
-            int i = 0;
-            while (i < count)
+            for (int i = 0; i < count; i++)
             {
                 InventorySlotUI ui = _slotUIs[i];
 
@@ -113,8 +108,6 @@ namespace Dungeon
                 {
                     ui.Refresh(null);
                 }
-
-                i += 1;
             }
         }
 
@@ -187,6 +180,17 @@ namespace Dungeon
             }
 
             Debug.Log("Inventory " + (_isOpen ? "opened" : "closed"));
+        }
+
+        private void HookToPlayerInventory()
+        {
+            Player = FindFirstObjectByType<Player>();
+
+            if (Player != null)
+            {
+                Inventory = Player.Inventory;
+                Debug.Log($"[InventoryUI] Hooked to Player {Player.name}, Inventory ID {Inventory?.GetInstanceID()}");
+            }
         }
     }
 }

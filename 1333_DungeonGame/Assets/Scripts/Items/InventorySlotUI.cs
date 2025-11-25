@@ -30,6 +30,8 @@ namespace Dungeon
         {
             if (slot == null || slot.IsEmpty)
             {
+                Debug.Log($"[SlotUI {_slotIndex}] EMPTY");
+
                 if (IconImage != null)
                 {
                     IconImage.enabled = false;
@@ -49,10 +51,20 @@ namespace Dungeon
                 return;
             }
 
+            string itemName = slot.Item != null ? slot.Item.DisplayName : "NULL ITEM";
+            bool hasIcon = slot.Item != null && slot.Item.Icon != null;
+
+            Debug.Log($"[SlotUI {_slotIndex}] item={itemName}, hasIcon={hasIcon}, qty={slot.Quantity}");
+
             if (IconImage != null)
             {
                 IconImage.enabled = true;
                 IconImage.sprite = slot.Item != null ? slot.Item.Icon : null;
+
+                IconImage.color = Color.white;
+                IconImage.preserveAspect = true;
+                IconImage.raycastTarget = false;
+                IconImage.SetAllDirty();
             }
 
             if (QuantityText != null)
@@ -73,6 +85,7 @@ namespace Dungeon
                 RarityBorder.color = GetColorForRarity(slot.Rarity);
             }
         }
+
 
         public void OnClick()
         {

@@ -13,11 +13,7 @@ MonoBehaviour:
   m_Name: Loot Table
   m_EditorClassIdentifier: Assembly-CSharp::Dungeon.LootTable
   Items:
-  - {fileID: 11400000, guid: f16b83a6fee39744783914e66bcf3dbf, type: 2}
-  - {fileID: 11400000, guid: 2751d290e7ec3a14b8488434ea47719f, type: 2}
   - {fileID: 11400000, guid: 42ae1ef8eaf27884b9eac653186c660c, type: 2}
-  - {fileID: 11400000, guid: f4c54f7d37e5af84baa6ff5221e2e180, type: 2}
-  - {fileID: 11400000, guid: 9f7e4c88ae6ab0546a2681decbdbbe06, type: 2}
   CommonWeight: 60
   UncommonWeight: 25
   RareWeight: 10
