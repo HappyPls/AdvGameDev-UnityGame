@@ -22,16 +22,11 @@ MonoBehaviour:
   CritMultiplier: 1.5
   DodgeChance: 0.05
   DiceSet:
-  - Sides: 6
-    Label: d6
-  - Sides: 6
-    Label: d6
-  - Sides: 6
-    Label: d6
-  - Sides: 8
-    Label: d8
-  - Sides: 8
-    Label: d8
+  - {fileID: 11400000, guid: 72e64e622a66cda49affb4c993735df7, type: 2}
+  - {fileID: 11400000, guid: 72e64e622a66cda49affb4c993735df7, type: 2}
+  - {fileID: 11400000, guid: 72e64e622a66cda49affb4c993735df7, type: 2}
+  - {fileID: 11400000, guid: 72e64e622a66cda49affb4c993735df7, type: 2}
+  - {fileID: 11400000, guid: 72e64e622a66cda49affb4c993735df7, type: 2}
   HandSize: 5
   XPReward: 5
   GoldRewardMin: 1

@@ -35,6 +35,10 @@ namespace Dungeon
         [Header("Runtime State")]
         public bool IsAlive = true;
         public bool IsBusy = false;
+        public bool IsDead
+        {
+            get { return !IsAlive; }
+        }
 
         [Header("Events")]
         public UnityEvent OnDeath;
@@ -46,7 +50,7 @@ namespace Dungeon
         protected virtual void Awake()
         {
             _rng = new System.Random();
-            if (HP > MaxHp) HP = MaxHp;
+            ClampHP();
             if (HP < 0) IsAlive = false;
         }
 

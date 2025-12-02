@@ -9,24 +9,32 @@ namespace Dungeon
 
         private Enemy _spawnedEnemy;
 
+        [Header("Combat")]
+        public CombatController CombatController;
+
         void Awake()
         {
             if (Spawner == null)
             {
                 Spawner = GetComponentInChildren<EnemySpawner>();
             }
+
+            CombatController = FindFirstObjectByType<CombatController>();
+            if (CombatController == null)
+            {
+                Debug.LogWarning("EncounterRoom: No CombatController found. Combat will not start.");
+            }
         }
 
         public override void TriggerRoomEvent(Player player)
         {
-            // If room is cleared, do nothing forever.
             if (IsCleared)
             {
                 Debug.Log("The room has already been cleared.");
                 return;
             }
 
-            // If an enemy is already spawned and still alive, don't spawn another one.
+            //check for existing enemy. Dont spawn another if there is one.
             if (_spawnedEnemy != null && _spawnedEnemy.IsAlive)
             {
                 Debug.Log("EncounterRoom: Enemy already present in " + RoomName + ", not spawning a new one.");
@@ -40,6 +48,12 @@ namespace Dungeon
                 return;
             }
 
+            if (player == null)
+            {
+                Debug.LogError("EncounterRoom: TriggerRoomEvent called with null player.");
+                return;
+            }
+
             Vector3 center = transform.position;
             center.y += 1f;
 
@@ -49,6 +63,15 @@ namespace Dungeon
             {
                 _spawnedEnemy.OnDeath.AddListener(OnEnemyDefeated);
                 Debug.Log("Encounter started in " + RoomName + "!");
+
+                if (CombatController != null)
+                {
+                    CombatController.BeginCombat(player, _spawnedEnemy);
+                }
+                else
+                {
+                    Debug.LogWarning("EncounterRoom: CombatController missing, enemy will just stand in the room.");
+                }
             }
             else
             {
@@ -56,6 +79,7 @@ namespace Dungeon
                 IsCleared = true;
             }
         }
+
         private void OnEnemyDefeated()
         {
             Debug.Log("Enemy in " + RoomName + " has been defeated!");

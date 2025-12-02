@@ -275,7 +275,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32af3c996e4116149bea70f21774873e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Dungeon.Inventory
-  Capacity: 20
+  Capacity: 18
   Slots: []
 --- !u!1 &5932142493061075919
 GameObject:

@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 657b12aca1268fb49ab3227433107f05, type: 3}
+  m_Name: EnemyDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::Dungeon.EnemyDatabase
+  Enemies:
+  - Id: Slime
+    DisplayName: Cave Slime
+    Prefab: {fileID: 3145183270353525086, guid: 6f49f1184d377634b9fc10cddb63cc19, type: 3}
+  - Id: Goblin
+    DisplayName: Goblin
+    Prefab: {fileID: 784307087318614460, guid: f829007ef03d8164399890ba87f21b61, type: 3}
+  - Id: Skeleton
+    DisplayName: Skeleton
+    Prefab: {fileID: 3509992288407469442, guid: 08ac5a760b0dc9e428827dca73117b23, type: 3}
+  - Id: Iron Golem
+    DisplayName: Iron Golem
+    Prefab: {fileID: 8464324946099499329, guid: 790f23ca406dd8f459da37bc3ed24e24, type: 3}
